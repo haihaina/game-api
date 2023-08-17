@@ -27,17 +27,14 @@ var matching = [];
 let onlineUser = [];
 
 io.on('connection', (socket) => {
-
     // 保存每一个登录用户的socket及相关状态信息
     socketList[socket.id] = {
         opponent: null,         // 对手socketid
         status: 0,              // 状态: 0, 刚进入; 1: 请求匹配中; 2: 游戏中;
         name: ''                // 该用户的名称
     }
-
     // 第一步首先获取 新用户的昵称; 格式 {userName: "Tom"} 
     socket.on('newUserName', (msg) => {
-
         console.log("newUser coming --- " + msg.userName + "\n");
         console.log(`当前在线用户共 ${Object.keys(socketList).length} 人\n\n`);
         onlineUser.push(
@@ -60,17 +57,13 @@ io.on('connection', (socket) => {
     })
     // 用户点击 开始游戏, 触发对手匹配
     socket.on('startGame', startGameCallBack);
-
     function startGameCallBack(msg) {
-
         console.log(`用户${msg.userName}开始匹配游戏....`);
         console.log(msg);
-
         // 将其加入请求匹配的数组中
         matching.push(socket.id);
         // 修改该socket状态
         socketList[socket.id].status = 1;
-
         var deal = match.doMatch(matching, socket, socketList);
         // 修改start状态
         onlineUser = onlineUser.map((item) => {
